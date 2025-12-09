@@ -190,6 +190,7 @@ export async function POST(request: NextRequest) {
           },
           experience: {
             create: sanitizedProfile.experience.map((exp) => ({
+              id: require('crypto').randomUUID(),
               title: exp.title,
               company: exp.company,
               startDate: new Date(exp.startDate),
