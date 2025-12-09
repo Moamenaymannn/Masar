@@ -18,7 +18,7 @@ export async function GET(
           deleted_at: null,
         },
         include: {
-          roadmap: {
+          career_roadmaps: {
             select: {
               roadmapRole: true,
               user: {
@@ -44,7 +44,7 @@ export async function GET(
           deleted_at: null,
         },
         include: {
-          roadmap: {
+          career_roadmaps: {
             select: {
               roadmapRole: true,
               user: {
@@ -92,7 +92,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         deleted_at: null,
       },
       include: {
-        roadmap: {
+        career_roadmaps: {
           select: {
             user: {
               select: {
@@ -122,11 +122,11 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         title,
         description,
         instructors,
-        courseLink,
+        course_link: courseLink,
         updatedAt: new Date(),
       },
       include: {
-        roadmap: {
+        career_roadmaps: {
           select: {
             roadmapRole: true,
             user: {
@@ -164,7 +164,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         deleted_at: null,
       },
       include: {
-        roadmap: {
+        career_roadmaps: {
           select: {
             user: {
               select: {
@@ -194,7 +194,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
         deleted_at: new Date(),
       },
       include: {
-        roadmap: {
+        career_roadmaps: {
           select: {
             roadmapRole: true,
             user: {
