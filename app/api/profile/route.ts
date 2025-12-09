@@ -147,6 +147,10 @@ export async function POST(request: NextRequest) {
         },
       });
 
+      if (!profile) {
+        return NextResponse.json({ error: 'Failed to fetch updated profile' }, { status: 500 });
+      }
+
       await logInfo('Profile updated successfully', {
         profileId: profile.id,
         email: profile.email,
