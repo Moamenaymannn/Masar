@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { validateCSRFToken, CSRF_COOKIE } from '@/app/lib/security/csrf';
 import { getServerSession } from 'next-auth';
 import { PrismaClient } from '@prisma/client';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/lib/auth/authOptions';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',

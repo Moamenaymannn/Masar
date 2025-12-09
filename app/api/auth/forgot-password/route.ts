@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     // Always return success for security
     return NextResponse.json({ message: "If an account with that email exists, a reset link has been sent." });
   } catch (error) {
-    logError(error, { route: "forgot-password" });
+    logError(error as Error, { route: "forgot-password" });
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 } 
