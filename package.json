@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "test-roadmap": "tsx scripts/test-roadmap-skills.ts",
     "test:roadmap": "tsx app/services/roadmapService.test.ts",
     "test": "jest",

@@ -169,38 +169,38 @@ export default function CVUploadPage() {
       'Security Administration',
       'Cloud Administration'
     ],
-      'Human Resources Specialist': [
-    'Recruitment',
-    'Employee Engagement',
-    'HR Analytics',
-    'Talent Development',
-    'Labor Law Compliance',
-  ],
-  'Project Manager': [
-    'Agile Project Management',
-    'Scrum',
-    'Risk Management',
-    'Program Management',
-    'Stakeholder Engagement',
-  ],
-  'Marketing Specialist': [
-    'Search Engine Optimization (SEO)',
-    'Pay-Per-Click (PPC) Advertising',
-    'Social Media Marketing',
-    'Email Marketing',
-    'Content Marketing',
-    'Content Strategy',
-    'SEO Content Writing',
-    'Video Content Production',
-    'Content Analytics',
-    'Brand Storytelling',
-    'Campaign Analytics',
-    'A/B Testing',
-    'Customer Segmentation',
-    'CRM Management',
-    'Data Visualization',
-  ],
-  
+    'Human Resources Specialist': [
+      'Recruitment',
+      'Employee Engagement',
+      'HR Analytics',
+      'Talent Development',
+      'Labor Law Compliance',
+    ],
+    'Project Manager': [
+      'Agile Project Management',
+      'Scrum',
+      'Risk Management',
+      'Program Management',
+      'Stakeholder Engagement',
+    ],
+    'Marketing Specialist': [
+      'Search Engine Optimization (SEO)',
+      'Pay-Per-Click (PPC) Advertising',
+      'Social Media Marketing',
+      'Email Marketing',
+      'Content Marketing',
+      'Content Strategy',
+      'SEO Content Writing',
+      'Video Content Production',
+      'Content Analytics',
+      'Brand Storytelling',
+      'Campaign Analytics',
+      'A/B Testing',
+      'Customer Segmentation',
+      'CRM Management',
+      'Data Visualization',
+    ],
+
   };
 
   const jobRoles = Object.keys(jobRolesWithSpecializations);
@@ -208,7 +208,7 @@ export default function CVUploadPage() {
   const specializations = selectedRole ? jobRolesWithSpecializations[selectedRole] : [];
 
   const additionalInfo = watch('additionalInfo', '');
-  
+
   useEffect(() => {
     const words = (additionalInfo || '').trim().split(/\s+/).filter(word => word.length > 0);
     setWordCount(words.length);
@@ -230,7 +230,7 @@ export default function CVUploadPage() {
   //       }
 
   //       const data = await response.json();
-        
+
   //       if (!data.hasProfile) {
   //         setShowProfileMessage(true);
   //         // Redirect to build-profile page after a short delay
@@ -276,6 +276,13 @@ export default function CVUploadPage() {
 
       const data = await response.json();
 
+      // Check if validation was skipped (due to quota or missing API key)
+      if (data.skipped) {
+        console.warn('Skill validation skipped:', data.message);
+        // Don't show error, just log it - skills will be used as-is
+        return data.validSkills || skills;
+      }
+
       if (!response.ok) {
         console.error('Validation error:', data);
         throw new Error(data.error || 'Failed to validate skills');
@@ -290,10 +297,8 @@ export default function CVUploadPage() {
       return data.validSkills;
     } catch (error) {
       console.error('Error in validateSkillsWithGemini:', error);
-      setUploadStatus({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to validate skills. Using original skills.' 
-      });
+      // Don't show error to user - just use original skills
+      console.warn('Using original skills due to validation error');
       return skills; // Return original skills if validation fails
     }
   };
@@ -333,20 +338,20 @@ export default function CVUploadPage() {
         throw new Error('Failed to save resume data');
       }
 
-      setUploadStatus({ 
-        type: 'success', 
-        message: 'CV processed successfully! Moving to next steps.....' 
+      setUploadStatus({
+        type: 'success',
+        message: 'CV processed successfully! Moving to next steps.....'
       });
-      
+
       setTimeout(() => {
         window.location.href = `/assessment?role=${encodeURIComponent(data.jobRole)}&specialization=${encodeURIComponent(data.specialization)}`;
       }, 2000);
-      
+
     } catch (error) {
       console.error('Error saving resume data:', error);
-      setUploadStatus({ 
-        type: 'error', 
-        message: 'Failed to process CV. Please try again.' 
+      setUploadStatus({
+        type: 'error',
+        message: 'Failed to process CV. Please try again.'
       });
     } finally {
       setIsUploading(false);
@@ -388,19 +393,19 @@ export default function CVUploadPage() {
             education: result.data.education || [],
             certifications: result.data.certifications || [],
             languages: result.data.languages || [],
-            rawData: result.data 
+            rawData: result.data
           };
 
           setParsedData(parsedData);
           setUploadedFile(file);
           setUploadStatus({ type: 'success', message: 'CV parsed successfully!' });
-          
+
           // Validate skills with Gemini
           setIsValidatingSkills(true);
           const validatedSkills = await validateSkillsWithGemini(parsedData.skills);
           setValidatedSkills(validatedSkills);
           setIsValidatingSkills(false);
-          
+
           setShowParsedData(true);
         } else {
           throw new Error(result.error || 'Failed to parse resume');
@@ -423,7 +428,7 @@ export default function CVUploadPage() {
         {showProfileMessage && (
           <div className="mb-8 p-4 rounded-lg border border-red-200 bg-red-50 flex items-center justify-between">
             <div className="flex items-center">
-              <AlertCircle className="w-5 h-5 mr-2" style={{color: '#FF4B36'}} />
+              <AlertCircle className="w-5 h-5 mr-2" style={{ color: '#FF4B36' }} />
               <span className="text-gray-900">Please complete your profile first before uploading your CV.</span>
             </div>
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#FF4B36]"></div>
@@ -431,7 +436,7 @@ export default function CVUploadPage() {
         )}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-4" style={{background: 'linear-gradient(to right, #2434B3, #1e29a3)'}}>
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'linear-gradient(to right, #2434B3, #1e29a3)' }}>
               <Upload className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Upload Your CV</h1>
@@ -440,7 +445,7 @@ export default function CVUploadPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* File Upload Section */}
-            <div className="border-2 border-dashed rounded-xl p-8 text-center transition-colors" style={{borderColor: '#2434B3'}} onMouseEnter={(e) => (e.target as HTMLElement).style.borderColor = '#FF4B36'} onMouseLeave={(e) => (e.target as HTMLElement).style.borderColor = '#2434B3'}>
+            <div className="border-2 border-dashed rounded-xl p-8 text-center transition-colors" style={{ borderColor: '#2434B3' }} onMouseEnter={(e) => (e.target as HTMLElement).style.borderColor = '#FF4B36'} onMouseLeave={(e) => (e.target as HTMLElement).style.borderColor = '#2434B3'}>
               <input
                 type="file"
                 id="cv-upload"
@@ -457,7 +462,7 @@ export default function CVUploadPage() {
               >
                 {isParsing ? (
                   <div className="flex flex-col items-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mb-4" style={{borderColor: '#2434B3'}}></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mb-4" style={{ borderColor: '#2434B3' }}></div>
                     <div className="text-gray-600">Analyzing your CV...</div>
                   </div>
                 ) : uploadedFile ? (
@@ -470,23 +475,23 @@ export default function CVUploadPage() {
                           removeFile();
                           setUploadStatus(null);
                         }}
-                        className="rounded-full p-1 transition-colors" 
-                        style={{backgroundColor: '#ffebe9'}}
+                        className="rounded-full p-1 transition-colors"
+                        style={{ backgroundColor: '#ffebe9' }}
                         onMouseEnter={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#ffd6d1')}
                         onMouseLeave={(e) => ((e.target as HTMLButtonElement).style.backgroundColor = '#ffebe9')}
                       >
-                        <XCircle className="w-5 h-5" style={{color: '#FF4B36'}} />
+                        <XCircle className="w-5 h-5" style={{ color: '#FF4B36' }} />
                       </button>
                     </div>
-                    <FileText className="w-12 h-12 mx-auto" style={{color: '#2434B3'}} />
-                    <div className="font-medium truncate max-w-xs mx-auto" style={{color: '#2434B3'}}>
+                    <FileText className="w-12 h-12 mx-auto" style={{ color: '#2434B3' }} />
+                    <div className="font-medium truncate max-w-xs mx-auto" style={{ color: '#2434B3' }}>
                       {uploadedFile.name}
                     </div>
                     <div className="text-sm text-gray-500 mt-2">Click to change file</div>
                   </div>
                 ) : (
                   <>
-                    <Upload className="w-12 h-12" style={{color: '#2434B3'}} />
+                    <Upload className="w-12 h-12" style={{ color: '#2434B3' }} />
                     <div className="text-lg font-medium text-gray-700">
                       Drop your CV here or click to browse
                     </div>
@@ -505,12 +510,12 @@ export default function CVUploadPage() {
                 <h3 className="text-lg font-medium text-gray-900 mb-4">
                   Extracted Information
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h4 className="text-md font-medium text-gray-700 mb-2 flex items-center">
                       <span>Validated Skills</span>
-                      <span className="ml-2 text-xs px-2 py-1 rounded-full text-white" style={{backgroundColor: '#2434B3'}}>
+                      <span className="ml-2 text-xs px-2 py-1 rounded-full text-white" style={{ backgroundColor: '#2434B3' }}>
                         {validatedSkills.length} found
                       </span>
                     </h4>
@@ -522,10 +527,10 @@ export default function CVUploadPage() {
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {validatedSkills.map((skill, index) => (
-                          <span 
-                            key={index} 
+                          <span
+                            key={index}
                             className="text-sm px-3 py-1 rounded-full text-white"
-                            style={{backgroundColor: '#FF4B36'}}
+                            style={{ backgroundColor: '#FF4B36' }}
                           >
                             {skill}
                           </span>
@@ -535,7 +540,7 @@ export default function CVUploadPage() {
                   </div>
 
                 </div>
-                
+
                 <button
                   type="button"
                   onClick={() => setShowParsedData(false)}
@@ -556,7 +561,7 @@ export default function CVUploadPage() {
               <select
                 {...register('jobRole', { required: 'Please select a job role' })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900"
-                style={{'--tw-ring-color': '#2434B3'} as React.CSSProperties}
+                style={{ '--tw-ring-color': '#2434B3' } as React.CSSProperties}
                 onFocus={(e) => {
                   e.target.style.outline = 'none';
                   e.target.style.borderColor = '#2434B3';
@@ -573,7 +578,7 @@ export default function CVUploadPage() {
                 ))}
               </select>
               {errors.jobRole && (
-                <p className="mt-2 text-sm flex items-center" style={{color: '#FF4B36'}}>
+                <p className="mt-2 text-sm flex items-center" style={{ color: '#FF4B36' }}>
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.jobRole.message}
                 </p>
@@ -589,7 +594,7 @@ export default function CVUploadPage() {
                 <select
                   {...register('specialization', { required: 'Please select a specialization' })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-900"
-                  style={{'--tw-ring-color': '#2434B3'} as React.CSSProperties}
+                  style={{ '--tw-ring-color': '#2434B3' } as React.CSSProperties}
                   onFocus={(e) => {
                     e.target.style.outline = 'none';
                     e.target.style.borderColor = '#2434B3';
@@ -606,7 +611,7 @@ export default function CVUploadPage() {
                   ))}
                 </select>
                 {errors.specialization && (
-                  <p className="mt-2 text-sm flex items-center" style={{color: '#FF4B36'}}>
+                  <p className="mt-2 text-sm flex items-center" style={{ color: '#FF4B36' }}>
                     <AlertCircle className="w-4 h-4 mr-1" />
                     {errors.specialization.message}
                   </p>
@@ -631,9 +636,8 @@ export default function CVUploadPage() {
                   })}
                   rows={4}
                   placeholder="Tell us about your career goals, preferred technologies, extra skills, or any specific requirements..."
-                  className={`w-full px-4 py-3 border ${
-                    wordCount > MAX_WORDS ? 'border-red-300' : 'border-gray-300'
-                  } rounded-lg resize-none`}
+                  className={`w-full px-4 py-3 border ${wordCount > MAX_WORDS ? 'border-red-300' : 'border-gray-300'
+                    } rounded-lg resize-none`}
                   onFocus={(e) => {
                     if (wordCount <= MAX_WORDS) {
                       e.target.style.outline = 'none';
@@ -655,7 +659,7 @@ export default function CVUploadPage() {
                 </div>
               </div>
               {errors.additionalInfo && (
-                <p className="mt-2 text-sm flex items-center" style={{color: '#FF4B36'}}>
+                <p className="mt-2 text-sm flex items-center" style={{ color: '#FF4B36' }}>
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {/* Sanitize error message display */}
                   {typeof errors.additionalInfo.message === 'string' ? errors.additionalInfo.message : 'Invalid input'}
@@ -665,13 +669,12 @@ export default function CVUploadPage() {
 
             {/* Status Messages */}
             {uploadStatus && (
-              <div className={`flex items-center p-4 rounded-lg border ${
-                uploadStatus.type === 'success' 
-                  ? 'bg-blue-50 border-blue-200' 
+              <div className={`flex items-center p-4 rounded-lg border ${uploadStatus.type === 'success'
+                  ? 'bg-blue-50 border-blue-200'
                   : 'bg-red-50 border-red-200'
-              }`} style={{
-                color: uploadStatus.type === 'success' ? '#2434B3' : '#FF4B36'
-              }}>
+                }`} style={{
+                  color: uploadStatus.type === 'success' ? '#2434B3' : '#FF4B36'
+                }}>
                 {uploadStatus.type === 'success' ? (
                   <CheckCircle className="w-5 h-5 mr-2" />
                 ) : (
@@ -688,7 +691,7 @@ export default function CVUploadPage() {
               className="w-full text-white py-4 px-6 rounded-lg font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 transition-all duration-200"
               style={{
                 background: isUploading || !uploadedFile || !selectedRole || !watch('specialization')
-                  ? '#9ca3af' 
+                  ? '#9ca3af'
                   : 'linear-gradient(to right, #2434B3, #FF4B36)'
               }}
               onMouseEnter={(e) => {
