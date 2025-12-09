@@ -127,6 +127,7 @@ export async function POST(request: NextRequest) {
 
       await prisma.experience.createMany({
         data: sanitizedProfile.experience.map((exp) => ({
+          id: require('crypto').randomUUID(),
           userId: existingUser.id,
           title: exp.title,
           company: exp.company,
