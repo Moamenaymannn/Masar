@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
         return fetch(RESUME_PARSER_API_URL, {
           method: 'POST',
           headers: {
-            'apikey': RESUME_PARSER_API_KEY,
+            'apikey': RESUME_PARSER_API_KEY!,
             'Content-Type': contentType,
             'Content-Disposition': `attachment; filename="${file.name}"`,
           },
