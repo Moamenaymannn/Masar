@@ -1,8 +1,6 @@
 import nodemailer from 'nodemailer';
-import { PrismaClient } from '@prisma/client';
 import { logInfo, logError } from './logger';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/app/lib/prisma';
 
 export class OTPService {
   private transporter: nodemailer.Transporter;
