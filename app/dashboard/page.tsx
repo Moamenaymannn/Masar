@@ -61,7 +61,7 @@ interface Roadmap {
 const fadeInUp = {
   initial: { opacity: 0, y: 80 },
   animate: { opacity: 1, y: 0 },
-  transition: { 
+  transition: {
     duration: 1.2,
     ease: [0.4, 0, 0.2, 1]
   }
@@ -122,7 +122,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchOrGenerateRoadmap = async () => {
       if (status === 'loading') return;
-      
+
       if (!session?.user?.id) {
         setError('Please sign in to view your roadmap');
         setLoading(false);
@@ -171,7 +171,7 @@ export default function DashboardPage() {
           console.log(end);
           console.log("========Now=========");
           console.log(now);
-          return  now <= end ; 
+          return now <= end;
 
         });
         console.log("========Has Valid Payment=========");
@@ -190,13 +190,13 @@ export default function DashboardPage() {
       try {
         // First, try to fetch existing roadmaps
         const response = await fetch(`/api/users/${session.user.id}/roadmaps`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch roadmap');
         }
-        
+
         const data = await response.json();
-        
+
         if (data && data.length > 0) {
           // Roadmap exists, use it
           setRoadmap(data[0]);
@@ -207,7 +207,7 @@ export default function DashboardPage() {
           setIsGenerating(true);
           setToastMessage('Generating your personalized roadmap...');
           setToastSeverity('info');
-          
+
           const generateResponse = await fetchWithCsrf('/api/career-roadmap', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -216,10 +216,10 @@ export default function DashboardPage() {
 
           if (!generateResponse.ok) {
             const errorData = await generateResponse.json();
-            
+
             // Check if it's a career preference issue
-            if (generateResponse.status === 400 && 
-                errorData.error?.includes('career preference')) {
+            if (generateResponse.status === 400 &&
+              errorData.error?.includes('career preference')) {
               setError('Please complete your career preferences to generate a roadmap. Go to Profile → Build Profile to set up your career preferences.');
               setToastMessage('Career preferences required. Please complete your profile first.');
               setToastSeverity('info');
@@ -233,7 +233,7 @@ export default function DashboardPage() {
             setToastMessage('Roadmap generated successfully!');
             setToastSeverity('success');
           }
-          
+
           setIsGenerating(false);
           setLoading(false);
         }
@@ -263,12 +263,14 @@ export default function DashboardPage() {
       setRoadmap((prev: Roadmap | null) => {
         if (!prev) return null;
 
-        const updated = { ...prev, topics: prev.topics.map((topic: Topic) => {
-          const newTasks = topic.tasks?.map((task: Task) =>
-            task.id === taskId ? { ...task, isCompleted: !currentStatus } : task
-          );
-          return { ...topic, tasks: newTasks };
-        }) };
+        const updated = {
+          ...prev, topics: prev.topics.map((topic: Topic) => {
+            const newTasks = topic.tasks?.map((task: Task) =>
+              task.id === taskId ? { ...task, isCompleted: !currentStatus } : task
+            );
+            return { ...topic, tasks: newTasks };
+          })
+        };
 
         setSelectedRoadmap(updated);
 
@@ -442,7 +444,7 @@ export default function DashboardPage() {
             </Typography>
             <Typography className="text-gray-600 mt-2 flex items-center gap-1">
               <StarIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
-              Let's master new skills with fun and ease!
+              Let&apos;s master new skills with fun and ease!
             </Typography>
           </Box>
 
@@ -471,9 +473,9 @@ export default function DashboardPage() {
         onClose={handleCloseToast}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseToast} 
-          severity={toastSeverity} 
+        <Alert
+          onClose={handleCloseToast}
+          severity={toastSeverity}
           className="rounded-lg"
           sx={{
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',

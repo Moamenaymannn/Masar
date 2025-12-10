@@ -4,7 +4,7 @@ import { randomBytes } from "crypto";
 import nodemailer from "nodemailer";
 import { logInfo, logError, logWarning } from "@/app/lib/services/logger";
 
-const prisma = new PrismaClient();
+import { prisma } from "@/app/lib/prisma";
 
 export async function POST(req: Request) {
   try {

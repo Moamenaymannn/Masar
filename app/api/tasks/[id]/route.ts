@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Prisma, PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { prisma } from "@/app/lib/prisma";
 
 
 // PATCH /api/tasks/[id] - Partially update a task

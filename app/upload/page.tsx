@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -670,8 +670,8 @@ export default function CVUploadPage() {
             {/* Status Messages */}
             {uploadStatus && (
               <div className={`flex items-center p-4 rounded-lg border ${uploadStatus.type === 'success'
-                  ? 'bg-blue-50 border-blue-200'
-                  : 'bg-red-50 border-red-200'
+                ? 'bg-blue-50 border-blue-200'
+                : 'bg-red-50 border-red-200'
                 }`} style={{
                   color: uploadStatus.type === 'success' ? '#2434B3' : '#FF4B36'
                 }}>

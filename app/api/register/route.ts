@@ -4,7 +4,7 @@ import { hash } from "bcrypt";
 import { otpService } from "@/app/lib/services/otpService";
 import { logInfo, logError, logWarning } from "@/app/lib/services/logger";
 
-const prisma = new PrismaClient();
+import { prisma } from "@/app/lib/prisma";
 
 export async function POST(req: Request) {
   try {

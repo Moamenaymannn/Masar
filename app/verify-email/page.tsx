@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Layout from '../components/Layout';
 import OTPInput from '../components/OTPInput';
 
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -113,7 +113,7 @@ export default function VerifyEmail() {
             <div className="flex flex-col items-center mb-6">
               <h1 className="text-3xl font-bold text-gray-900 mb-1">Verify Email</h1>
               <p className="text-gray-500 text-sm text-center">
-                We've sent a verification code to your email address.
+                We&apos;ve sent a verification code to your email address.
               </p>
             </div>
 
@@ -162,7 +162,7 @@ export default function VerifyEmail() {
 
               <div className="text-center">
                 <p className="text-sm text-gray-500 mb-2">
-                  Didn't receive the code?
+                  Didn&apos;t receive the code?
                 </p>
                 <button
                   type="button"
@@ -173,8 +173,8 @@ export default function VerifyEmail() {
                   {isResending
                     ? "Sending..."
                     : countdown > 0
-                    ? `Resend in ${countdown}s`
-                    : "Resend Code"}
+                      ? `Resend in ${countdown}s`
+                      : "Resend Code"}
                 </button>
               </div>
 
@@ -192,4 +192,12 @@ export default function VerifyEmail() {
       </div>
     </Layout>
   );
-} 
+}
+
+export default function VerifyEmail() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
+  );
+}

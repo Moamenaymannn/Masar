@@ -7,8 +7,8 @@ export async function GET(
   { params }: { params: { userId: string; skillId: string } }
 ) {
   try {
-    const userId = parseInt(params.userId);
-    const skillId = parseInt(params.skillId);
+    const userId = params.userId;
+    const skillId = params.skillId;
 
     const skill = await prisma.skill.findFirst({
       where: {
@@ -36,8 +36,8 @@ export async function PUT(
   { params }: { params: { userId: string; skillId: string } }
 ) {
   try {
-    const userId = parseInt(params.userId);
-    const skillId = parseInt(params.skillId);
+    const userId = params.userId;
+    const skillId = params.skillId;
     const body = await request.json();
     const { name, level } = body;
 
@@ -102,8 +102,8 @@ export async function DELETE(
   { params }: { params: { userId: string; skillId: string } }
 ) {
   try {
-    const userId = parseInt(params.userId);
-    const skillId = parseInt(params.skillId);
+    const userId = params.userId;
+    const skillId = params.skillId;
 
     // Check if the skill exists and belongs to the user
     const skill = await prisma.skill.findFirst({

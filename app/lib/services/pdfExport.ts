@@ -14,7 +14,7 @@ export const exportProfileToPdf = async (profile: UserProfile): Promise<void> =>
   pdf.text('Personal Information', margin, yOffset);
   yOffset += 10;
   pdf.setFontSize(12);
-  pdf.text(`Full Name: ${profile.fullName}`, margin, yOffset);
+  pdf.text(`Full Name: ${profile.firstName} ${profile.lastName}`, margin, yOffset);
   yOffset += 7;
   pdf.text(`Email: ${profile.email}`, margin, yOffset);
   yOffset += 15;
@@ -31,6 +31,7 @@ export const exportProfileToPdf = async (profile: UserProfile): Promise<void> =>
     yOffset += 15;
   }
 
+  /*
   if (profile.careerPreferences) {
     pdf.setFontSize(16);
     pdf.text('Career Preferences', margin, yOffset);
@@ -45,6 +46,7 @@ export const exportProfileToPdf = async (profile: UserProfile): Promise<void> =>
     pdf.text(`Preferred Salary: $${profile.careerPreferences.preferredSalary}`, margin, yOffset);
     yOffset += 15;
   }
+  */
 
   if (profile.education && profile.education.length > 0) {
     pdf.setFontSize(16);
@@ -81,7 +83,7 @@ export const exportProfileToPdf = async (profile: UserProfile): Promise<void> =>
   // Convert HTML content to PDF
   const content = document.createElement('div');
   content.innerHTML = `
-    <h1>${profile.fullName}</h1>
+    <h1>${profile.firstName} ${profile.lastName}</h1>
     <p>Email: ${profile.email}</p>
     <h2>Skills</h2>
     <ul>
@@ -116,5 +118,5 @@ export const exportProfileToPdf = async (profile: UserProfile): Promise<void> =>
   //   pdf.save(`${profile.fullName}_profile.pdf`);
   // });
 
-  pdf.save(`${profile.fullName}_profile.pdf`);
+  pdf.save(`${profile.firstName}_${profile.lastName}_profile.pdf`);
 }; 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
+import { prisma } from "@/app/lib/prisma";
 
 // GET /api/skills - Get all skills (no GET by ID)
 export async function GET() {
@@ -71,36 +72,3 @@ export async function POST(req: Request) {
   }
 }
 
-// PUT /api/skills/[id] - Update skill
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  try {
-    const body = await req.json();
-    const { jobRole, name, level } = body;
-
-    const skill = await prisma.skill.update({
-      where: { id: params.id },
-      data: { jobRole, name, level }
-    });
-
-    return NextResponse.json(skill);
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-// DELETE /api/skills/[id] - Soft delete skill
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  try {
-    const skill = await prisma.skill.update({
-      where: { id: params.id },
-      data: { deletedAt: new Date() }
-    });
-
-    return NextResponse.json({
-      message: 'Skill soft-deleted successfully',
-      deletedSkill: skill
-    });
-  } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}

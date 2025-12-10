@@ -27,20 +27,20 @@ export default function ContactPage() {
     try {
       setIsLoading(true);
       console.log('Fetching CSRF token...');
-      
+
       // Always fetch the CSRF token from the dedicated API endpoint
       const response = await fetch('/api/csrf', {
         method: 'GET',
         credentials: 'include',
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to initialize CSRF token from API: ${response.status} ${response.statusText}`);
       }
-      
+
       const { token } = await response.json();
       console.log('Received token from API:', token);
-      
+
       if (token) {
         setCsrfToken(token);
         setIsInitialized(true);
@@ -97,7 +97,7 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isInitialized) {
       toast.error('Form is not ready. Please wait a moment and try again.');
       return;
@@ -272,14 +272,14 @@ export default function ContactPage() {
               className="bg-white p-8 rounded-xl shadow-2xl border border-purple-100 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out"
             >
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Contact Information</h2>
-              <p className="text-gray-700 mb-8">Reach out to us through the following channels. We're always happy to hear from you!</p>
+              <p className="text-gray-700 mb-8">Reach out to us through the following channels. We&apos;re always happy to hear from you!</p>
 
               <div className="space-y-6">
                 <motion.div variants={itemVariants} className="flex items-start space-x-4 bg-purple-50 p-4 rounded-lg shadow-sm border border-purple-100">
                   <Mail className="flex-shrink-0 w-7 h-7 text-[#2434B3]" />
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800">Email Us</h3>
-                    <p className="text-gray-600 mt-1">ITIinfo@iti.gov.eg</p>
+                    <p className="text-gray-600">We&apos;ll get back to you as soon as possible.</p>
                   </div>
                 </motion.div>
                 <motion.div variants={itemVariants} className="flex items-start space-x-4 bg-purple-50 p-4 rounded-lg shadow-sm border border-purple-100">

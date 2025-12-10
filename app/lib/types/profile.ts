@@ -20,6 +20,15 @@ export interface Experience {
   description?: string;
 }
 
+export interface CareerPreference {
+  id?: string;
+  industry: string;
+  preferredSalary: number;
+  workType: string;
+  location: string;
+  jobRole?: string | null;
+}
+
 export interface UserProfile {
   firstName: string;
   lastName: string;
@@ -28,4 +37,5 @@ export interface UserProfile {
   skills: Skill[];
   education: Education[];
   experience: Experience[];
+  careerPreferences?: CareerPreference;
 } 

@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const userId = parseInt(params.userId);
+    const userId = params.userId;
     const skills = await prisma.skill.findMany({
       where: { userId },
     });
@@ -26,7 +26,7 @@ export async function POST(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const userId = parseInt(params.userId);
+    const userId = params.userId;
     const body = await request.json();
     const { name, level } = body;
 

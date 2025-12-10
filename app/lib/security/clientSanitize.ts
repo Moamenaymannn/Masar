@@ -37,7 +37,8 @@ export function sanitizeProfile(profile: UserProfile): UserProfile {
   const sanitized: UserProfile = { ...profile };
   
   // Sanitize string fields
-  sanitized.fullName = sanitizeString(sanitized.fullName);
+  sanitized.firstName = sanitizeString(sanitized.firstName);
+  sanitized.lastName = sanitizeString(sanitized.lastName);
   sanitized.email = sanitizeString(sanitized.email);
   
   // Sanitize skills

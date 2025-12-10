@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Assessment from "../components/Assessment";
 import { useSearchParams } from 'next/navigation';
 import Layout from '../../components/Layout'
 import { FileText, CheckCircle, AlertCircle } from 'lucide-react';
 
-export default function AssessmentPage() {
+function AssessmentContent() {
   const [role, setRole] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [showAssessment, setShowAssessment] = useState(false);
@@ -106,5 +106,13 @@ export default function AssessmentPage() {
         )}
       </div>
     </Layout>
+  );
+}
+
+export default function AssessmentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <AssessmentContent />
+    </Suspense>
   );
 }

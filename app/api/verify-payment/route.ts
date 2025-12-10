@@ -5,10 +5,10 @@ import { PrismaClient } from '@prisma/client';
 import { authOptions } from '@/app/lib/auth/authOptions';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-05-28.basil',
+  apiVersion: '2023-10-16',
 });
 
-const prisma = new PrismaClient();
+import { prisma } from "@/app/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {

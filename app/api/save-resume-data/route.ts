@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { authOptions } from '@/app/lib/auth/authOptions';
 import crypto from 'crypto';
 
-const prisma = new PrismaClient();
+import { prisma } from "@/app/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {

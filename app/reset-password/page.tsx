@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Layout from "@/components/Layout";
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
@@ -90,7 +90,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 className="w-full text-white px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                style={{background: 'linear-gradient(135deg, #2434B3 0%, #1a2a8a 100%)'}}
+                style={{ background: 'linear-gradient(135deg, #2434B3 0%, #1a2a8a 100%)' }}
               >
                 Reset Password
               </button>
@@ -100,4 +100,12 @@ export default function ResetPassword() {
       </div>
     </Layout>
   );
-} 
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}

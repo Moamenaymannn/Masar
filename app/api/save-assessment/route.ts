@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth/authOptions";
 import { prisma } from "@/app/lib/prisma";
 import { CSRF_HEADER, CSRF_COOKIE } from "@/app/lib/security/csrf";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // Get CSRF token from header and cookie
     const csrfToken = request.headers.get(CSRF_HEADER);
