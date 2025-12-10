@@ -25,12 +25,12 @@ const securityHeaders = {
     `.replace(/\s+/g, ' ').trim()
     : `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com;
-      style-src 'self' 'unsafe-inline';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;
+      style-src 'self' 'unsafe-inline' https:;
       img-src 'self' data: https:;
-      font-src 'self';
-      connect-src 'self' https://api.stripe.com;
-      frame-src 'self' https://js.stripe.com https://hooks.stripe.com;
+      font-src 'self' data: https:;
+      connect-src 'self' https:;
+      frame-src 'self' https:;
       frame-ancestors 'none';
       form-action 'self';
       base-uri 'self';
@@ -103,12 +103,12 @@ export async function middleware(request: NextRequest) {
       ...securityHeaders,
       'Content-Security-Policy': `
         default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com;
-        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;
+        style-src 'self' 'unsafe-inline' https:;
         img-src 'self' data: https:;
-        font-src 'self';
-        connect-src 'self' https://api.stripe.com;
-        frame-src 'self' https://js.stripe.com https://hooks.stripe.com;
+        font-src 'self' data: https:;
+        connect-src 'self' https:;
+        frame-src 'self' https:;
         frame-ancestors 'none';
         form-action 'self';
         base-uri 'self';
