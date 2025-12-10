@@ -1,5 +1,3 @@
-'use server';
-
 import { createLogger, format, transports, Logger as WinstonLogger } from 'winston';
 import 'winston-daily-rotate-file'; // Required for DailyRotateFile transport
 import Transport from 'winston-transport'; // Import base Transport type
@@ -7,10 +5,9 @@ import Transport from 'winston-transport'; // Import base Transport type
 // Define log context type
 type LogContext = Record<string, unknown>;
 
-// Determine if running in Node.js runtime (for file logging)
-const isNodeJsRuntime = process.env.NEXT_RUNTIME === 'nodejs';
-console.error('CRITICAL DEBUG: process.env.NEXT_RUNTIME in logger.ts:', process.env.NEXT_RUNTIME);
-console.error('CRITICAL DEBUG: isNodeJsRuntime in logger.ts:', isNodeJsRuntime);
+// Determine if running in Node.js runtime AND not in production (for file logging)
+// File logging doesn't work on Vercel's serverless environment due to ephemeral filesystem
+const isNodeJsRuntime = process.env.NEXT_RUNTIME === 'nodejs' && process.env.NODE_ENV !== 'production';
 
 const logTransports: Transport[] = [
   new transports.Console({
@@ -22,7 +19,7 @@ const logTransports: Transport[] = [
   })
 ];
 
-// Add file transport only if in Node.js runtime
+// Add file transport only if in Node.js runtime and not in production
 if (isNodeJsRuntime) {
   try {
     logTransports.push(
@@ -38,7 +35,6 @@ if (isNodeJsRuntime) {
         )
       })
     );
-    // console.log('File logging enabled.'); // Use console.log here to avoid circular dependency
   } catch (err) {
     console.error('Failed to initialize winston-daily-rotate-file:', err);
   }
