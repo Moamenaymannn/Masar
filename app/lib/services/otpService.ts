@@ -9,12 +9,12 @@ export class OTPService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
+      host: process.env.SMTP_HOST || process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || process.env.EMAIL_PORT || '587'),
       secure: false,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.SMTP_USER || process.env.EMAIL_USER,
+        pass: process.env.SMTP_PASS || process.env.EMAIL_PASSWORD,
       },
     });
   }
@@ -28,7 +28,7 @@ export class OTPService {
   async sendOTPEmail(email: string, otp: string, firstName: string): Promise<boolean> {
     try {
       const mailOptions = {
-        from: process.env.SMTP_USER,
+        from: process.env.SMTP_USER || process.env.EMAIL_USER,
         to: email,
         subject: 'Email Verification - Masar',
         html: `
