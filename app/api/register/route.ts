@@ -6,6 +6,8 @@ import { logInfo, logError, logWarning } from "@/app/lib/services/logger";
 
 import { prisma } from "@/app/lib/prisma";
 
+export const runtime = 'nodejs';
+
 export async function POST(req: Request) {
   try {
     logInfo("Register request received");
