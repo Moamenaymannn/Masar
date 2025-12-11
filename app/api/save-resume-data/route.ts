@@ -39,19 +39,15 @@ export async function POST(request: NextRequest) {
           where: { userId: session.user.id },
         });
 
-        // Create new skills
-        await Promise.all(
-          skills.map((skill: string) =>
-            tx.skill.create({
-              data: {
-                name: skill,
-                category: 'Technical', // You might want to categorize skills
-                userId: session.user.id,
-                updatedAt: new Date(),
-              },
-            })
-          )
-        );
+        // Create new skills using createMany for better performance
+        await tx.skill.createMany({
+          data: skills.map((skill: string) => ({
+            name: skill,
+            category: 'Technical',
+            userId: session.user.id,
+            updatedAt: new Date(),
+          })),
+        });
       }
 
       // Save education
@@ -62,9 +58,8 @@ export async function POST(request: NextRequest) {
         });
 
         // Create new education records
-        await Promise.all(
-          education.map((edu: any) => {
-            // Parse graduation year, default to current year if invalid
+        await tx.education.createMany({
+          data: education.map((edu: any) => {
             let graduationYear = new Date().getFullYear();
             if (edu.dates) {
               const yearMatch = edu.dates.match(/\d{4}/);
@@ -72,18 +67,15 @@ export async function POST(request: NextRequest) {
                 graduationYear = parseInt(yearMatch[0]);
               }
             }
-
-            return tx.education.create({
-              data: {
-                degree: edu.degree || 'Not specified',
-                fieldOfStudy: 'Not specified', // Default value
-                institution: edu.institution || 'Not specified',
-                graduationYear: graduationYear,
-                userId: session.user.id,
-              },
-            });
-          })
-        );
+            return {
+              degree: edu.degree || 'Not specified',
+              fieldOfStudy: 'Not specified',
+              institution: edu.institution || 'Not specified',
+              graduationYear: graduationYear,
+              userId: session.user.id,
+            };
+          }),
+        });
       }
 
       // Save work experience
@@ -94,25 +86,23 @@ export async function POST(request: NextRequest) {
         });
 
         // Create new experience records
-        await Promise.all(
-          workExperience.map((exp: any) => {
+        await tx.experience.createMany({
+          data: workExperience.map((exp: any) => {
             const dates = exp.dates?.split('-') || [];
             const startDate = new Date(dates[0] || new Date());
             const endDate = dates[1] ? new Date(dates[1]) : null;
 
-            return tx.experience.create({
-              data: {
-                id: crypto.randomUUID(),
-                title: exp.jobTitle || 'Not specified',
-                company: exp.company || 'Not specified',
-                startDate,
-                endDate,
-                description: exp.description || '',
-                userId: session.user.id,
-              },
-            });
-          })
-        );
+            return {
+              id: crypto.randomUUID(),
+              title: exp.jobTitle || 'Not specified',
+              company: exp.company || 'Not specified',
+              startDate,
+              endDate,
+              description: exp.description || '',
+              userId: session.user.id,
+            };
+          }),
+        });
       }
 
       // Save career preference
@@ -131,6 +121,9 @@ export async function POST(request: NextRequest) {
       });
 
       return { success: true };
+    }, {
+      maxWait: 5000, // default: 2000
+      timeout: 10000, // default: 5000
     });
 
     return NextResponse.json(result);
