@@ -55,7 +55,14 @@ export async function POST(req: Request) {
       requiresVerification: true
     });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
+    console.error('[REGISTER_ERROR]', errorMessage, errorStack);
     logError(error as Error, { route: "register" });
-    return NextResponse.json({ error: "Internal server error", details: String(error) }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Internal server error", 
+      message: errorMessage,
+      stack: process.env.NODE_ENV === 'development' ? errorStack : undefined
+    }, { status: 500 });
   }
 }
