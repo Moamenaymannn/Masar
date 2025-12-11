@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { logInfo, logError, logWarning } from "@/app/lib/services/logger";
 
 import { prisma } from "@/app/lib/prisma";
