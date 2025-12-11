@@ -17,21 +17,26 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
-        if (!user || !user.password) return null;
-        if (!user.isEmailVerified) {
-          throw new Error("Please verify your email before logging in.");
+        try {
+          if (!credentials?.email || !credentials?.password) return null;
+          const user = await prisma.user.findUnique({ where: { email: credentials.email } });
+          if (!user || !user.password) return null;
+          if (!user.isEmailVerified) {
+            throw new Error("Please verify your email before logging in.");
+          }
+          const isValid = await compare(credentials.password, user.password);
+          if (!isValid) return null;
+          return { 
+            id: user.id, 
+            email: user.email, 
+            firstName: user.firstName, 
+            lastName: user.lastName,
+            image: user.image
+          };
+        } catch (error) {
+          console.error("Authorize error:", error);
+          return null;
         }
-        const isValid = await compare(credentials.password, user.password);
-        if (!isValid) return null;
-        return { 
-          id: user.id, 
-          email: user.email, 
-          firstName: user.firstName, 
-          lastName: user.lastName,
-          image: user.image
-        };
       },
     }),
     GoogleProvider({
